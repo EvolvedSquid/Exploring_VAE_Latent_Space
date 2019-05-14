@@ -1,12 +1,8 @@
-from keras.models import load_model, Model
+from keras.models import load_model
 from keras.layers import Layer
-from keras.datasets import mnist
 import keras.backend as K
-import matplotlib.pyplot as plt
-from matplotlib.widgets import Slider, Button, RadioButtons
 import numpy as np
-from scipy.stats import norm
-import random, math, pygame
+import pygame
 
 
 def nll(y_true, y_pred): # Negative loss likelihood
@@ -25,8 +21,8 @@ class KLDivergenceLayer(Layer): # KL Layer
 
         return inputs
 
-encoder = load_model('encoder_3d.hdf5', custom_objects={'KLDivergenceLayer': KLDivergenceLayer, 'nll': nll})
-decoder = load_model('decoder_3d.hdf5', custom_objects={'KLDivergenceLayer': KLDivergenceLayer, 'nll': nll})
+encoder = load_model('Models/encoder_3d.hdf5', custom_objects={'KLDivergenceLayer': KLDivergenceLayer, 'nll': nll})
+decoder = load_model('Models/decoder_3d.hdf5', custom_objects={'KLDivergenceLayer': KLDivergenceLayer, 'nll': nll})
 
 round_n = 3 # Round visuals to nearest 1/3
 dimensions = 3 # Number of dimensions
@@ -39,6 +35,7 @@ max_y = 3 # Max y value possible with mouse
 
 
 slider_z = 0.5
+slider_t = 0.5
 
 pygame.init()
 screen = pygame.display.set_mode((width, height), pygame.RESIZABLE)
@@ -56,8 +53,11 @@ while not done:
             slider_z -= 0.05
         if keys[pygame.K_RIGHT]:
             slider_z += 0.05
-
-        # Get latent dimensions from mouse position and value of slider_z
+        if keys[pygame.K_UP]:
+            slider_t += 0.05
+        if keys[pygame.K_DOWN]:
+            slider_t -= 0.05
+        # Get latent dimensions from mouse position and value of slider_z/t
         if dimensions == 2:
             latent = np.array([(mouse_x*max_x)/width+min_x, (mouse_y*max_y)/height+min_y]).reshape((1, 2))
         else:
