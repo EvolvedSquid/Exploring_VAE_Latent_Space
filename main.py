@@ -21,11 +21,11 @@ class KLDivergenceLayer(Layer): # KL Layer
 
         return inputs
 
-encoder = load_model('Models/encoder_3d.hdf5', custom_objects={'KLDivergenceLayer': KLDivergenceLayer, 'nll': nll})
-decoder = load_model('Models/decoder_3d.hdf5', custom_objects={'KLDivergenceLayer': KLDivergenceLayer, 'nll': nll})
+encoder = load_model('Models/encoder_4d.hdf5', custom_objects={'KLDivergenceLayer': KLDivergenceLayer, 'nll': nll})
+decoder = load_model('Models/decoder_4d.hdf5', custom_objects={'KLDivergenceLayer': KLDivergenceLayer, 'nll': nll})
 
 round_n = 3 # Round visuals to nearest 1/3
-dimensions = 3 # Number of dimensions
+dimensions = 4 # Number of dimensions
 width = height = 1008
 w = h = 36
 min_x = -2 # Min x value possible with mouse
